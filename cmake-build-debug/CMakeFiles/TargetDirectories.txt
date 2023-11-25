@@ -1,0 +1,3 @@
+H:/My Drive/Documents/USP/Estrutura de Dados 3/Trabalho 2/parte 2/cmake-build-debug/CMakeFiles/parte_2.dir
+H:/My Drive/Documents/USP/Estrutura de Dados 3/Trabalho 2/parte 2/cmake-build-debug/CMakeFiles/edit_cache.dir
+H:/My Drive/Documents/USP/Estrutura de Dados 3/Trabalho 2/parte 2/cmake-build-debug/CMakeFiles/rebuild_cache.dir
