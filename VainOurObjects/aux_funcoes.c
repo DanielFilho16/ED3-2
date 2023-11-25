@@ -378,6 +378,28 @@ void parte_5(Registro *x, Ponteiro P)
     else Pesquisa (x, P -> p[i]);
 }
 
+int parte_6(FILE *dados, FILE *indice , char *busca )
+{
+    Cabecalho_arvore cabecalho;
+    lerCabecalho(&cabecalho, indice);
+    if (cabecalho.status == '0')
+    {
+        printf("Falha no processamento do arquivo.");
+        return -1;
+    }
+    int busca_rrn = encontrarRRN(busca, cabecalho.noRaiz, indice);
+    if (busca_rrn == -1)
+    {
+        printf("Registro inexistente.\n");
+    }
+    else
+    {
+//        parte_4(dados, busca_rrn);
+    }
+    return 0;
+
+}
+
 
 
 

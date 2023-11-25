@@ -4,7 +4,7 @@
 #define TAM_TECNOLOGIA 20
 #define TAM_CABECALHO 13
 #define TAM_PAG 512
-#define TAM_ITEM 64
+#define TAM_ITEM 55
 #include <stdio.h>
 
 typedef struct Cabecalho{
@@ -13,7 +13,7 @@ typedef struct Cabecalho{
     int nroTecnologias; //quantidade, inicial eh 0, apenas diferentes
     int nroParesTecnologias; //quantidade, inicial eh 0, apenas diferentes
 } Cabecalho;
-typedef struct {
+typedef struct StringVariavel{
     int tamanho;
     char string[TAM_TECNOLOGIA];
 } StringVariavel;
@@ -33,12 +33,13 @@ typedef struct EnderecoTipo{
     char b;
 }EnderecoTipo;
 
-typedef ItemTipo {
+typedef struct ItemTipo
+{
     Registro Reg;
     EnderecoTipo Esq, Dir;
 }ItemTipo;
 
-typedef ItemTipo PaginaTipo[TAM_ITEM]
+typedef ItemTipo PaginaTipo[TAM_ITEM];
 
 typedef struct PaginaTipo{
     char tipo;
@@ -47,24 +48,17 @@ typedef struct PaginaTipo{
         PaginaTipoB Pb;
         PaginaTipoC Pc;
     }P;
-}PaginaTipo;
+}PaginaTipo1;
 
 typedef long TipoChave;
-typedef struct Registro{
-    TipoChave Chave;
-}Registro;
-typedef struct Pagina* Ponteiro;
-typedef struct Pagina{
-    char n;
-    int nroChavesno;
-    int RRNdoNo;
-    int alturaN;
-    int chaves[3];
-    int ponteiros[4];
-    int camposReferencia[2];
-    Registro r[mm];
-    Ponteiro p[mm+1];
-}Pagina;
+
+//typedef struct Registro1
+//{
+//    TipoChave Chave;
+//}Registro1;
+
+
+
 
 //Fim código livro
 
@@ -77,6 +71,36 @@ typedef struct Lista{
     No * inicio;
     int qnt;
 }Lista;
+
+
+/*Código parte 6*/
+typedef struct Pagina* Ponteiro;
+typedef struct Pagina{
+    char n;
+    int nroChavesno;
+    int RRNdoNo;
+    int alturaN;
+    char chaves[3][55];
+    int ponteiros[4];
+    int camposReferencia[3];
+    //Registro r[mm];
+    //Ponteiro p[mm+1];
+}Pagina;
+
+typedef struct Cabecalho_arvore
+{
+    char status;
+    int noRaiz;
+    int RRNproxNo;
+    char lixo[196];
+}Cabecalho_arvore;
+
+void lerCabecalho(Cabecalho *cabecalho, FILE *arquivoBinario);
+int encontrarRRN(char *busca, int rrnDaRaiz, FILE *arquivoBinario);
+int encontrarRRNRec(char *busca, int rrnDaRaiz, FILE *arquivoIndice);
+void lerNo(No *no, FILE *arquivoBinario);
+/*Fim parte 6 */
+
 
 struct Registro *novoRegistro();
 struct Cabecalho *novoCabecalho();

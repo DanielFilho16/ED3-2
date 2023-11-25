@@ -300,124 +300,152 @@ void exibe(Registro *Registro){
     printf("peso: %d\n\n", Registro->peso);
 }
 
-//void parte_3(FILE *arquivo,Registro *registro,Cabecalho *cabecalho) {
-//
-//    int n; // Número de vezes que a busca deve ser executada
-//    int totalRegistros = 0;
-//    int encontrados = 0;
-//    // Lê os registros do arquivo
-//    fseek(arquivo, 0, 0);
-//
-//    fread(&(cabecalho->status), sizeof(char),1, arquivo);
-//    fread(&(cabecalho->proxRRN),sizeof(int),1, arquivo);
-//    fread(&(cabecalho->nroTecnologias), sizeof(int), 1, arquivo);
-//    fread(&(cabecalho->nroParesTecnologias), sizeof(int), 1, arquivo);
-//
-//
-//    while(!feof(arquivo)) {
-//
-//
-////----------------------------------LEIUTRA DOS DADOS DO ARQUIVO BINARIO--------------------------------------//
-//        if (fread(&(registro->removido), sizeof(char), 1, arquivo)) {
-//
-//            fread(&(registro->grupo), sizeof(int), 1, arquivo);
-//            fread(&(registro->popularidade), sizeof(int), 1, arquivo);
-//            fread(&(registro->peso), sizeof(int), 1, arquivo);
-//
-//            //string variavel
-//            fread(&registro->tecnologiaOrigem.tamanho, sizeof(int), 1, arquivo);
-//            fread(registro->tecnologiaOrigem.string, sizeof(char) * registro->tecnologiaOrigem.tamanho, 1, arquivo);
-//            // if(registro->tecnologiaOrigem.string[0] == '$') registro->tecnologiaOrigem.string[0] = ' ';
-//            registro->tecnologiaOrigem.string[registro->tecnologiaOrigem.tamanho] = '\0';
-//
-//
-//            fread(&registro->tecnologiaDestino.tamanho, sizeof(int), 1, arquivo);
-//            fread(registro->tecnologiaDestino.string, sizeof(char) * registro->tecnologiaDestino.tamanho, 1,
-//                  arquivo);
-//            // if(registro->tecnologiaDestino.string[0] == '$') registro->tecnologiaDestino.string[0] = ' ';
-//            registro->tecnologiaDestino.string[registro->tecnologiaDestino.tamanho] = '\0';
-//
-//            char lixo = '$';
-//            while (!feof(arquivo) && lixo == '$') {
-//                fread(&lixo, sizeof(char), 1, arquivo);
-//            }
-//
-//            if (!feof(arquivo)) {
-//                fseek(arquivo, -1, 1);
-//            }
-//            totalRegistros++;
-//        }
-//    }
-//        fclose(arquivo);
-//
-//            scanf("%d", &n);
-//
-//            while (n > 0) {
-//                char campoBusca[TAM_REGISTRO]; //Declara e pega o que vai ser pesquisado
-//                scanf("%s", campoBusca);
-//
-//                for (int i = 0; i < totalRegistros; i++) {
-//                    if (registro->removido == 0) { // Verifica se o registro não está logicamente removido
-//                        if (strcmp(campoBusca, "nome") == 0) {
-//                            char buscaNome[TAM_REGISTRO];
-//                            printf("Digite o nome a ser buscado: ");
-//                            scan_quote_string(buscaNome);
-//                            if (strcmp(buscaNome, registros[i].nome) == 0) {
-//                                encontrados++;
-//                                printf("Registro encontrado: ID %d, Nome: %s, Peso: %lf\n", registros[i].id,
-//                                       registros[i].nome, registros[i].peso);
-//                            }
-//                        } else if (strcmp(campoBusca, "peso") == 0) {
-//                            double buscaPeso;
-//                            printf("Digite o peso a ser buscado: ");
-//                            scanf("%lf", &buscaPeso);
-//                            if (buscaPeso == registros[i].peso) {
-//                                encontrados++;
-//                                printf("Registro encontrado: ID %d, Nome: %s, Peso: %lf\n", registros[i].id,
-//                                       registros[i].nome, registros[i].peso);
-//                            }
-//                        }else if (strcmp(campoBusca, "peso") == 0) {
-//                            double buscaPeso;
-//                            printf("Digite o peso a ser buscado: ");
-//                            scanf("%lf", &buscaPeso);
-//                            if (buscaPeso == registros[i].peso) {
-//                                encontrados++;
-//                                printf("Registro encontrado: ID %d, Nome: %s, Peso: %lf\n", registros[i].id,
-//                                       registros[i].nome, registros[i].peso);
-//                            }
-//                        }else if (strcmp(campoBusca, "peso") == 0) {
-//                            double buscaPeso;
-//                            printf("Digite o peso a ser buscado: ");
-//                            scanf("%lf", &buscaPeso);
-//                            if (buscaPeso == registros[i].peso) {
-//                                encontrados++;
-//                                printf("Registro encontrado: ID %d, Nome: %s, Peso: %lf\n", registros[i].id,
-//                                       registros[i].nome, registros[i].peso);
-//                            }
-//                        }else if (strcmp(campoBusca, "peso") == 0) {
-//                            double buscaPeso;
-//                            printf("Digite o peso a ser buscado: ");
-//                            scanf("%lf", &buscaPeso);
-//                            if (buscaPeso == registros[i].peso) {
-//                                encontrados++;
-//                                printf("Registro encontrado: ID %d, Nome: %s, Peso: %lf\n", registros[i].id,
-//                                       registros[i].nome, registros[i].peso);
-//                            }
-//                        }
-//                    }
-//                }
-//
-//            }
-//
-//
-//            if (encontrados == 0) {
-//                printf("Nenhum registro encontrado.\n");
-//            }
-//
-//            n--;
-//        }
+/*Parte 6*/
 
-void
+Pagina *CriaPagina()
+{
+    Pagina *p;
+    p = (Pagina *) malloc(sizeof(Pagina));
+    p-> nroChavesno = 0;
+    p-> alturaN = 0;
+    p-> RRNdoNo = -1;
+
+    for (int i = 0; i < 4; ++i)
+    {
+        p->ponteiros[i] = -1;
+        p->camposReferencia[i] = -1;
+        for (int j = 0; j < 3; ++j)
+        {
+            p->chaves[i][j] = '\0';
+        }
+    }
+    return p;
+}
+
+void cabecalho(Cabecalho_arvore *cabecalhoArvore, FILE *indice)
+{
+  //ler todos os dados do cabecalho
+    fread(&cabecalhoArvore->status, sizeof(char), 1, indice);
+    fread(&cabecalhoArvore->noRaiz, sizeof(int), 1, indice);
+    fread(&cabecalhoArvore->RRNproxNo, sizeof(int), 1, indice);
+    fread(&cabecalhoArvore->lixo, sizeof(char), 196, indice);
+}
+
+void leitura_no (Pagina *pagina, FILE *indice)
+{
+    fread(&pagina->nroChavesno, sizeof(int), 1, indice);
+    fread(&pagina->alturaN, sizeof(int), 1, indice);
+    fread(&pagina->RRNdoNo, sizeof(int), 1, indice);
+
+    for (int i = 0; i < 4; ++i)
+    {
+        fread(&pagina->ponteiros[i], sizeof(int), 1, indice);
+        if (i < 3)
+        {
+            fread(&pagina->chaves[i], sizeof(char), 55, indice);
+            fread(&pagina->camposReferencia[i], sizeof(int), 1, indice);
+        }
+    }
+    for (int j = 0; j < 3; ++j)
+    {
+        for (int i = 0; i < 55; ++i)
+        {
+            if (pagina->chaves[j][i] == '$')
+            {
+                pagina->chaves[j][i] = '\0';
+            }
+        }
+    }
+}
+//explique o que a função abaixo faz passo a passo
+int recupera_rrn (char *busca, int rrnDaRaiz, FILE *indice)
+{
+    Pagina *pagina;
+    pagina = CriaPagina();
+    leitura_no(pagina, indice);
+    if (pagina->nroChavesno == 0)
+    {
+        return -1;
+    }
+    else
+    {
+        for (int i = 0; i < pagina->nroChavesno; ++i)
+        {
+            if (strcmp(busca, pagina->chaves[i]) == 0)
+            {
+                return pagina->camposReferencia[i];
+            }
+        }
+        for (int i = 0; i < pagina->nroChavesno; ++i)
+        {
+            if (strcmp(busca, pagina->chaves[i]) < 0)
+            {
+                return recupera_rrn(busca, pagina->ponteiros[i], indice);
+            }
+        }
+        return recupera_rrn(busca, pagina->ponteiros[pagina->nroChavesno], indice);
+    }
+}
+
+int recuperando(char *busca, int rrnAtual, FILE *indice)
+{
+    fseek(indice, (rrnAtual + 1) * 205, SEEK_SET);
+    Pagina pagina;
+    leitura_no(&pagina, indice);
+
+    for (int i = 0; i <= 3; ++i)
+    {
+        int resultado = strcmp(busca, pagina.chaves[i]);
+        if (i == 3)
+        {
+            if (pagina.ponteiros[i] != -1)
+            {
+                return recuperando(busca, pagina.ponteiros[i], indice);
+            }
+            else
+            {
+                return -1;
+            }
+        }
+        if (resultado < 0 || pagina.chaves[i][0] == '\0')
+        {
+            if (pagina.ponteiros[i] != -1)
+            {
+                return recuperando(busca, pagina.ponteiros[i], indice);
+            }
+            else
+            {
+                return -1;
+            }
+        }
+        else if (resultado == 0)
+        {
+            return pagina.camposReferencia[i];
+        }
+    }
+    if (pagina.ponteiros[3] != -1)
+    {
+        return recuperando(busca, pagina.ponteiros[3], indice);
+    }
+    else
+    {
+        return -1;
+    }
+}
+
+int recupera(char *busca, FILE *indice)
+{
+    return recuperando(busca, rrnAtual, indice);
+}
+
+/*Fim da parte 6*/
+
+
+int main()
+{
+    recuperando()
+
+};
 
 void InserePagina(Ponteiro P, Registro R, Ponteiro Pd)
 {
@@ -445,7 +473,8 @@ void InserePagina(Ponteiro P, Registro R, Ponteiro Pd)
     P -> n++;
 }
 
-void Ins(Registro R, Ponteiro P, short *Cresceu, Registro *RegRetorno, Ponteiro *P_retorno) {
+void Ins(Registro R, Ponteiro P, short *Cresceu, Registro *RegRetorno, Ponteiro *P_retorno)
+{
     long i = 1;
     long j;
 

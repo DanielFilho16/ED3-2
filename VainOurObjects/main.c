@@ -27,9 +27,10 @@ int main(int argv, char *argc[]){
         case 4:
             scanf("%s", filename);
             parte_4(filename);
-        default:
-            printf("Entrada indisponível.");
-            break;
+        case 5:
+            printf("Funcionalidade 5");
+        case 6:
+            printf("Funcionalidade 6");
     }
 
 
