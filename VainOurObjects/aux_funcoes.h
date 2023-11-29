@@ -9,7 +9,7 @@
 
 int parte_1(char *filename);
 int parte_2(char *filename);
-int parte_3();
+int parte_3(char *filename);
 int parte_4(char *filename, int RRN_P);
 int parte_5();
 int parte_6(FILE *dados, FILE *indice ,char *busca);
