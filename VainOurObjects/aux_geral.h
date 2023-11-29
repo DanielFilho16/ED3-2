@@ -24,7 +24,7 @@ typedef struct Registro{
     int peso;
     StringVariavel tecnologiaOrigem;
     StringVariavel tecnologiaDestino;
-    TipoChave Chave; // Livro
+    //TipoChave Chave; // Livro
 } Registro;
 
 //Código Livro
@@ -74,7 +74,7 @@ typedef struct Lista{
 
 
 /*Código parte 6*/
-typedef struct Pagina* Ponteiro;
+//typedef struct Pagina* Ponteiro;
 typedef struct Pagina{
     char n;
     int nroChavesno;
@@ -95,10 +95,10 @@ typedef struct Cabecalho_arvore
     char lixo[196];
 }Cabecalho_arvore;
 
-void lerCabecalho(Cabecalho *cabecalho, FILE *arquivoBinario);
-int encontrarRRN(char *busca, int rrnDaRaiz, FILE *arquivoBinario);
-int encontrarRRNRec(char *busca, int rrnDaRaiz, FILE *arquivoIndice);
-void lerNo(No *no, FILE *arquivoBinario);
+void lerCabecalho(Cabecalho_arvore *cabecalhoArvore, FILE *indice);
+int recuperando(char *busca, int rrnDaRaiz, FILE *indice);
+int recupera(char *busca, int rrnDaRaiz, FILE *indice);
+void leitura_no(Pagina *pagina, FILE *indice);
 /*Fim parte 6 */
 
 

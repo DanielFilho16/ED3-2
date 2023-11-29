@@ -304,8 +304,7 @@ void exibe(Registro *Registro){
 
 Pagina *CriaPagina()
 {
-    Pagina *p;
-    p = (Pagina *) malloc(sizeof(Pagina));
+    Pagina *p = (Pagina *) malloc(sizeof(Pagina));
     p-> nroChavesno = 0;
     p-> alturaN = 0;
     p-> RRNdoNo = -1;
@@ -316,13 +315,13 @@ Pagina *CriaPagina()
         p->camposReferencia[i] = -1;
         for (int j = 0; j < 3; ++j)
         {
-            p->chaves[i][j] = '\0';
+            p->chaves[j][0] = '\0';
         }
     }
     return p;
 }
 
-void cabecalho(Cabecalho_arvore *cabecalhoArvore, FILE *indice)
+void lerCabecalho(Cabecalho_arvore *cabecalhoArvore, FILE *indice)
 {
   //ler todos os dados do cabecalho
     fread(&cabecalhoArvore->status, sizeof(char), 1, indice);
@@ -342,8 +341,8 @@ void leitura_no (Pagina *pagina, FILE *indice)
         fread(&pagina->ponteiros[i], sizeof(int), 1, indice);
         if (i < 3)
         {
-            fread(&pagina->chaves[i], sizeof(char), 55, indice);
-            fread(&pagina->camposReferencia[i], sizeof(int), 1, indice);
+            fread(&(pagina->chaves[i]), sizeof(char), 55, indice);
+            fread(&(pagina->camposReferencia[i]), sizeof(int), 1, indice);
         }
     }
     for (int j = 0; j < 3; ++j)
@@ -357,37 +356,37 @@ void leitura_no (Pagina *pagina, FILE *indice)
         }
     }
 }
-//explique o que a função abaixo faz passo a passo
-int recupera_rrn (char *busca, int rrnDaRaiz, FILE *indice)
-{
-    Pagina *pagina;
-    pagina = CriaPagina();
-    leitura_no(pagina, indice);
-    if (pagina->nroChavesno == 0)
-    {
-        return -1;
-    }
-    else
-    {
-        for (int i = 0; i < pagina->nroChavesno; ++i)
-        {
-            if (strcmp(busca, pagina->chaves[i]) == 0)
-            {
-                return pagina->camposReferencia[i];
-            }
-        }
-        for (int i = 0; i < pagina->nroChavesno; ++i)
-        {
-            if (strcmp(busca, pagina->chaves[i]) < 0)
-            {
-                return recupera_rrn(busca, pagina->ponteiros[i], indice);
-            }
-        }
-        return recupera_rrn(busca, pagina->ponteiros[pagina->nroChavesno], indice);
-    }
-}
 
-int recuperando(char *busca, int rrnAtual, FILE *indice)
+//int recupera_rrn (char *busca, int rrnDaRaiz, FILE *indice)
+//{
+//    Pagina *pagina;
+//    pagina = CriaPagina();
+//    leitura_no(pagina, indice);
+//    if (pagina->nroChavesno == 0)
+//    {
+//        return -1;
+//    }
+//    else
+//    {
+//        for (int i = 0; i < pagina->nroChavesno; ++i)
+//        {
+//            if (strcmp(busca, pagina->chaves[i]) == 0)
+//            {
+//                return pagina->camposReferencia[i];
+//            }
+//        }
+//        for (int i = 0; i < pagina->nroChavesno; ++i)
+//        {
+//            if (strcmp(busca, pagina->chaves[i]) < 0)
+//            {
+//                return recupera_rrn(busca, pagina->ponteiros[i], indice);
+//            }
+//        }
+//        return recupera_rrn(busca, pagina->ponteiros[pagina->nroChavesno], indice);
+//    }
+//}
+
+int recuperando(char *busca, int rrnAtual, FILE *indice) //EncontraRRNrec
 {
     fseek(indice, (rrnAtual + 1) * 205, SEEK_SET);
     Pagina pagina;
@@ -423,9 +422,9 @@ int recuperando(char *busca, int rrnAtual, FILE *indice)
             return pagina.camposReferencia[i];
         }
     }
-    if (pagina.ponteiros[3] != -1)
+    if (pagina.ponteiros[pagina.nroChavesno] != -1)
     {
-        return recuperando(busca, pagina.ponteiros[3], indice);
+        return recuperando(busca, pagina.ponteiros[pagina.nroChavesno], indice);
     }
     else
     {
@@ -433,115 +432,115 @@ int recuperando(char *busca, int rrnAtual, FILE *indice)
     }
 }
 
-int recupera(char *busca, FILE *indice)
+int recupera(char *busca, int rrnDaRaiz,FILE *indice)
 {
-    return recuperando(busca, rrnAtual, indice);
-}
+    return recuperando(busca, rrnDaRaiz, indice);
+} //encontrar rrn
 
 /*Fim da parte 6*/
 
 
 int main()
 {
-    recuperando()
+    recupera();
 
 };
 
-void InserePagina(Ponteiro P, Registro R, Ponteiro Pd)
-{
-    short nao_achou;
-    int k;
-    k = P -> n;
-    nao_achou = (k>0);
-    while (nao_achou)
-    {
-        if(R.Chave >= P -> r[k-1].Chave)
-            {
-                nao_achou = false;
-                break;
-            }
-        P -> r[k] = P -> r [k-1];
-        P -> p[k+1] = P -> p [k];
-        k--;
-        if(k < 1)
-        {
-            nao_achou = false;
-        }
-    }
-    P -> r[k] = R;
-    P -> p[k+1] = Pd;
-    P -> n++;
-}
-
-void Ins(Registro R, Ponteiro P, short *Cresceu, Registro *RegRetorno, Ponteiro *P_retorno)
-{
-    long i = 1;
-    long j;
-
-    Ponteiro P_temp;
-
-    if (P == NULL) {
-        *Cresceu = true;
-        (*RegRetorno) = R;
-        (*P_retorno) = NULL;
-        return;
-    }
-
-    while (i < P->n && Reg.Chave > P->r[i - 1].Chave) i++;
-    if (Reg.Chave == P->r[i - 1].Chave) {
-        printf("Erro: registro já presente");
-        *Cresceu = false;
-        return;
-    }
-
-
-    if (Reg.Chave < P->r[i - 1].Chave) i--;
-    Ins(Reg, P->p[i], Cresceu, RegRetorno, P_retorno)
-    if (!*Cresceu) return;
-    if (P->n<[mm]) //Pagina tem espaco
-    {
-        InsereNaPagina(P, *RegRetorno, *P_retorno);
-        *Cresceu = FALSE;
-        return;
-    }
-//Overflow: Pagina tem que ser dividida
-
-    P_temp = (Ponteiro) malloc(sizeof(Pagina));
-    P_temp->n = 0;
-    P_temp->p[0] = null;
-    if (i < m + 1) {
-        InserePagina(P_temp, P->r[mm - 1], P->p[mm]);
-        P->n--;
-        InserePagina(P, *RegRetorno, *P_retorno);
-    } else InserePagina(P_temp, *RegRetorno, *P_retorno);
-    for (j = m + 2; j <= mm; j++) {
-        InserePagina(P_temp, P->r[j - 1], P->p[j]);
-        P->n = m;
-        P_temp->p[0] = P->P[m + 1];
-        *RegRetorno = P->r[m];
-        *P_retorno = P_temp;
-    }
-}
-
-void Insere (Registro Reg, Ponteiro *P)
-{
-    short Cresceu;
-    Registro RegRetorno;
-    Pagina *P_retorno, *P_temp;
-    Ins(Reg, *P,  &Cresceu, &RegRetorno, &P_retorno);
-    if (Cresceu) /*Arvore cresce na altura pela raiz*/
-    {
-        P_temp = (Pagina *) malloc (sizeof (Pagina));
-        P_temp -> n =1;
-        P_temp -> r[0] = RegRetorno;
-        P_temp -> p[1] = P_retorno;
-        P_temp -> p[0] = *P;
-        *P = P_temp;
-    }
-
-
-}
-
+//void InserePagina(Ponteiro P, Registro R, Ponteiro Pd)
+//{
+//    short nao_achou;
+//    int k;
+//    k = P -> n;
+//    nao_achou = (k>0);
+//    while (nao_achou)
+//    {
+//        if(R.Chave >= P -> r[k-1].Chave)
+//            {
+//                nao_achou = false;
+//                break;
+//            }
+//        P -> r[k] = P -> r [k-1];
+//        P -> p[k+1] = P -> p [k];
+//        k--;
+//        if(k < 1)
+//        {
+//            nao_achou = false;
+//        }
+//    }
+//    P -> r[k] = R;
+//    P -> p[k+1] = Pd;
+//    P -> n++;
+//}
+//
+//void Ins(Registro R, Ponteiro P, short *Cresceu, Registro *RegRetorno, Ponteiro *P_retorno)
+//{
+//    long i = 1;
+//    long j;
+//
+//    Ponteiro P_temp;
+//
+//    if (P == NULL) {
+//        *Cresceu = true;
+//        (*RegRetorno) = R;
+//        (*P_retorno) = NULL;
+//        return;
+//    }
+//
+//    while (i < P->n && Reg.Chave > P->r[i - 1].Chave) i++;
+//    if (Reg.Chave == P->r[i - 1].Chave) {
+//        printf("Erro: registro já presente");
+//        *Cresceu = false;
+//        return;
+//    }
+//
+//
+//    if (Reg.Chave < P->r[i - 1].Chave) i--;
+//    Ins(Reg, P->p[i], Cresceu, RegRetorno, P_retorno)
+//    if (!*Cresceu) return;
+//    if (P->n<[mm]) //Pagina tem espaco
+//    {
+//        InsereNaPagina(P, *RegRetorno, *P_retorno);
+//        *Cresceu = FALSE;
+//        return;
+//    }
+////Overflow: Pagina tem que ser dividida
+//
+//    P_temp = (Ponteiro) malloc(sizeof(Pagina));
+//    P_temp->n = 0;
+//    P_temp->p[0] = null;
+//    if (i < m + 1) {
+//        InserePagina(P_temp, P->r[mm - 1], P->p[mm]);
+//        P->n--;
+//        InserePagina(P, *RegRetorno, *P_retorno);
+//    } else InserePagina(P_temp, *RegRetorno, *P_retorno);
+//    for (j = m + 2; j <= mm; j++) {
+//        InserePagina(P_temp, P->r[j - 1], P->p[j]);
+//        P->n = m;
+//        P_temp->p[0] = P->P[m + 1];
+//        *RegRetorno = P->r[m];
+//        *P_retorno = P_temp;
+//    }
+//}
+//
+//void Insere (Registro Reg, Ponteiro *P)
+//{
+//    short Cresceu;
+//    Registro RegRetorno;
+//    Pagina *P_retorno, *P_temp;
+//    Ins(Reg, *P,  &Cresceu, &RegRetorno, &P_retorno);
+//    if (Cresceu) /*Arvore cresce na altura pela raiz*/
+//    {
+//        P_temp = (Pagina *) malloc (sizeof (Pagina));
+//        P_temp -> n =1;
+//        P_temp -> r[0] = RegRetorno;
+//        P_temp -> p[1] = P_retorno;
+//        P_temp -> p[0] = *P;
+//        *P = P_temp;
+//    }
+//
+//
+//}
+//
 
 
 
