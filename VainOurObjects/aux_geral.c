@@ -435,16 +435,16 @@ int recuperando(char *busca, int rrnAtual, FILE *indice) //EncontraRRNrec
 int recupera(char *busca, int rrnDaRaiz,FILE *indice)
 {
     return recuperando(busca, rrnDaRaiz, indice);
-} //encontrar rrn
+}
 
 /*Fim da parte 6*/
 
 
-int main()
-{
-    recupera();
-
-};
+//int main()
+//{
+//    recupera();
+//
+//};
 
 //void InserePagina(Ponteiro P, Registro R, Ponteiro Pd)
 //{

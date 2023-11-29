@@ -41,14 +41,14 @@ typedef struct ItemTipo
 
 typedef ItemTipo PaginaTipo[TAM_ITEM];
 
-typedef struct PaginaTipo{
-    char tipo;
-    union {
-        PaginaTipoA Pa;
-        PaginaTipoB Pb;
-        PaginaTipoC Pc;
-    }P;
-}PaginaTipo1;
+//typedef struct PaginaTipo{
+//    char tipo;
+//    union {
+//        PaginaTipoA Pa;
+//        PaginaTipoB Pb;
+//        PaginaTipoC Pc;
+//    }P;
+//}PaginaTipo1;
 
 typedef long TipoChave;
 
@@ -76,7 +76,7 @@ typedef struct Lista{
 /*Código parte 6*/
 //typedef struct Pagina* Ponteiro;
 typedef struct Pagina{
-    char n;
+    //char n;
     int nroChavesno;
     int RRNdoNo;
     int alturaN;
@@ -119,6 +119,7 @@ int n_de_registro(FILE *arquivoCSV); //Define o número do RRN
 void leitura_tabela(FILE *arquivoCSV, Registro *Registro); //Faz a leitura de dados da struct
 void exibe(Registro *Registro); //Exibe os dados organizadamente na tela
 void printaRegistro(Registro *registro);
+void scan_quote_string(char *str);
 
 
 

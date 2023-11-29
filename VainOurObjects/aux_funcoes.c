@@ -110,11 +110,13 @@ int parte_2(char *filename){
     fread(&(cabecalho->nroParesTecnologias), sizeof(int), 1, binario);
 
 
-    while(!feof(binario)){
+    while(!feof(binario))
+    {
 
 
 //----------------------------------LEIUTRA DOS DADOS DO ARQUIVO BINARIO--------------------------------------//
-        if(fread(&(registro->removido),sizeof(char),1,binario)){
+        if(fread(&(registro->removido),sizeof(char),1,binario))
+        {
 
 
             if(registro->removido == '0') {
@@ -147,7 +149,8 @@ int parte_2(char *filename){
             }
 
 
-            if(registro->removido == '1'){
+            if(registro->removido == '1')
+            {
                     fread(&(registro->grupo), sizeof(int), 1, binario);
                     fread(&(registro->popularidade), sizeof(int), 1, binario);
                     fread(&(registro->peso), sizeof(int), 1, binario);
@@ -174,11 +177,11 @@ int parte_2(char *filename){
                     }
 
 
-                }
+            }
 
 
         }
-}
+    }
     free(registro);
     free(cabecalho);
     fclose(binario);
@@ -292,7 +295,7 @@ int parte_3(char *filename){
     deletaRegistro(registro);
 
 }
-int parte_4(char *filename) {
+int parte_4(char *filename, int RRN_P) {
 
     FILE* binario = abre_arquivo(filename,"rb");
 
@@ -312,8 +315,7 @@ int parte_4(char *filename) {
     fread(&(cabecalho->nroTecnologias), sizeof(int), 1, binario);
     fread(&(cabecalho->nroParesTecnologias), sizeof(int), 1, binario);
 
-    int RRN;
-    scanf("%d", &RRN);
+    int RRN = RRN_P;
     if (cabecalho->proxRRN <= RRN) {
         printf("Registro inexistente.");
         return 0;
@@ -355,28 +357,27 @@ int parte_4(char *filename) {
 
 }
 
-
 //Função para pesquisar na árvore B
-void parte_5(Registro *x, Ponteiro P)
-{
-    long i =1;
-    if(P == NULL)
-    {
-        printf("Registro não esta presente na arvore");
-        return;
-    }
-    while (i<P ->n && x-> Chave > P -> r [i-1].Chave) i++;
-    if(x -> Chave == P -> r[i - 1].Chave)
-    {
-        *x = P ->r[i-1];
-        return;
-    }
-    if(x -> Chave < P -> r[i-1].Chave)
-    {
-        Pesquisa(x, P -> p[i-1]);
-    }
-    else Pesquisa (x, P -> p[i]);
-}
+//void parte_5(Registro *x, Ponteiro P)
+//{
+//    long i =1;
+//    if(P == NULL)
+//    {
+//        printf("Registro não esta presente na arvore");
+//        return;
+//    }
+//    while (i<P ->n && x-> Chave > P -> r [i-1].Chave) i++;
+//    if(x -> Chave == P -> r[i - 1].Chave)
+//    {
+//        *x = P ->r[i-1];
+//        return;
+//    }
+//    if(x -> Chave < P -> r[i-1].Chave)
+//    {
+//        Pesquisa(x, P -> p[i-1]);
+//    }
+//    else Pesquisa (x, P -> p[i]);
+//}
 
 int parte_6(FILE *dados, FILE *indice , char *busca )
 {
@@ -387,18 +388,18 @@ int parte_6(FILE *dados, FILE *indice , char *busca )
         printf("Falha no processamento do arquivo.");
         return -1;
     }
-    int busca_rrn = encontrarRRN(busca, cabecalho.noRaiz, indice);
-    if (busca_rrn == -1)
+
+    if (recupera(busca, cabecalho.noRaiz, indice) == -1)
     {
         printf("Registro inexistente.\n");
     }
     else
     {
-//        parte_4(dados, busca_rrn);
+        parte_4((char *) dados, recupera(busca, cabecalho.noRaiz, indice));
     }
     return 0;
 
-}
+} //ok
 
 
 
