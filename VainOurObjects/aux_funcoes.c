@@ -186,7 +186,7 @@ int parte_2(char *filename){
     free(cabecalho);
     fclose(binario);
 }
-int parte_3(char *filename){
+int parte_3(char *filename, char* especifica,char* info_busca, Registro *registro){
 
     FILE* binario = abre_arquivo(filename,"rb");
 
@@ -203,91 +203,126 @@ int parte_3(char *filename){
     fseek(binario, 0, 0);
 
     fread(&(cabecalho->status), sizeof(char),1, binario);
+
+    if (cabecalho->status == '0'){
+        printf("Falha no processamento do arquivo.\n");
+        return;
+    }
+
     fread(&(cabecalho->proxRRN),sizeof(int),1, binario);
     fread(&(cabecalho->nroTecnologias), sizeof(int), 1, binario);
     fread(&(cabecalho->nroParesTecnologias), sizeof(int), 1, binario);
 
     Registro* temp = malloc(sizeof(Registro));
 
-    while(!feof(binario)) {
+    int flag_encontrou = 0;
+    int busca_int = 0;
+
+    while(fread(&(registro->removido),sizeof(char), 1, binario)){
+
+        if(registro->removido == '0'){
+
+            fread(&(registro->grupo), sizeof(int), 1, binario);
+            fread(&(registro->popularidade), sizeof(int), 1, binario);
+            fread(&(registro->peso), sizeof(int), 1, binario);
+
+            //string variavel
+            fread(&registro->tecnologiaOrigem.tamanho, sizeof(int), 1, binario);
+            fread(registro->tecnologiaOrigem.string, sizeof(char)*registro->tecnologiaOrigem.tamanho,1 , binario);
+            registro->tecnologiaOrigem.string[registro->tecnologiaOrigem.tamanho] = '\0';
 
 
-        fread(&(registro->removido),sizeof(char), 1, binario);
-        fread(&(registro->grupo), sizeof(int), 1, binario);
-        fread(&(registro->popularidade), sizeof(int), 1, binario);
-        fread(&(registro->peso), sizeof(int), 1, binario);
-
-        //string variavel
-        fread(&registro->tecnologiaOrigem.tamanho, sizeof(int), 1, binario);
-        fread(registro->tecnologiaOrigem.string, sizeof(char)*registro->tecnologiaOrigem.tamanho,1 , binario);
-        registro->tecnologiaOrigem.string[registro->tecnologiaOrigem.tamanho] = '\0';
+            fread(&registro->tecnologiaDestino.tamanho, sizeof(int), 1, binario);
+            fread(registro->tecnologiaDestino.string, sizeof(char)*registro->tecnologiaDestino.tamanho,1 , binario);
+            registro->tecnologiaDestino.string[registro->tecnologiaDestino.tamanho] = '\0';
 
 
-        fread(&registro->tecnologiaDestino.tamanho, sizeof(int), 1, binario);
-        fread(registro->tecnologiaDestino.string, sizeof(char)*registro->tecnologiaDestino.tamanho,1 , binario);
-        registro->tecnologiaDestino.string[registro->tecnologiaDestino.tamanho] = '\0';
+            if (strcmp(especifica, "nomeTecnologiaOrigem") == 0){
+                if (registro->tecnologiaOrigem.tamanho == strlen(busca) && strncmp(busca, registro->tecnologiaOrigem.string, registro->tecnologiaOrigem.tamanho) == 0){
+                    imprimirRegistrosNaTela(&registro);
+                    flag_encontrou = 1;
+                }
+            }
+            if (strcmp(especifica, "grupo") == 0){
 
-        temp = malloc(sizeof(Registro));
-        registroNaLista(temp,lista);
 
-        char lixo = '$';
-        while (!feof(binario) && lixo == '$') {
-            fread(&lixo, sizeof(char), 1, binario);
+                if (sscanf(info_busca, "%d", &busca_int) == 1 && busca_int == registro->grupo){
+
+                    imprimirRegistrosNaTela(&registro);
+                    flag_encontrou = 1;
+                }
+            }
+            if (strcmp(especifica, "popularidade") == 0){
+
+
+                if (sscanf(info_busca, "%d", &busca_int) == 1 && busca_int == registro->popularidade)
+                {
+                    imprimirRegistrosNaTela(&registro);
+                    flag_encontrou = 1;
+                }
+            }
+            if (strcmp(especifica, "nomeTecnologiaDestino") == 0){
+
+                if (registro->tecnologiaDestino.tamanho == strlen(busca) && strncmp(busca, registro->tecnologiaDestino.string, registro->tecnologiaDestino.tamanho) == 0)
+                {
+                    imprimirRegistrosNaTela(&out);
+                    flag_encontrou = 1;
+                }
+            }
+            if (strcmp(especifica, "peso") == 0)
+            {
+
+                if (sscanf(info_busca, "%d", &busca_int) == 1 && busca_int == registro->peso)
+                {
+                    imprimirRegistrosNaTela(registro);
+                    flag_encontrou = 1;
+                }
+            }
+
+            if(!flag_encontrou) printf("Registro inexistente.\n");
+
+            char lixo = '$';
+            while (!feof(binario) && lixo == '$') {
+                fread(&lixo, sizeof(char), 1, binario);
+            }
+
+            if (!feof(binario)) {
+                fseek(binario, -1, 1);
+            }
+
         }
 
-        if (!feof(binario)) {
-            fseek(binario, -1, 1);
+        if(registro->removido == '1'){
+
+            fread(&(registro->grupo), sizeof(int), 1, binario);
+            fread(&(registro->popularidade), sizeof(int), 1, binario);
+            fread(&(registro->peso), sizeof(int), 1, binario);
+
+            //string variavel
+            fread(&registro->tecnologiaOrigem.tamanho, sizeof(int), 1, binario);
+            fread(registro->tecnologiaOrigem.string, sizeof(char)*registro->tecnologiaOrigem.tamanho,1 , binario);
+            registro->tecnologiaOrigem.string[registro->tecnologiaOrigem.tamanho] = '\0';
+
+
+            fread(&registro->tecnologiaDestino.tamanho, sizeof(int), 1, binario);
+            fread(registro->tecnologiaDestino.string, sizeof(char)*registro->tecnologiaDestino.tamanho,1 , binario);
+            registro->tecnologiaDestino.string[registro->tecnologiaDestino.tamanho] = '\0';
+
+
+            char lixo = '$';
+            while (!feof(binario) && lixo == '$') {
+                fread(&lixo, sizeof(char), 1, binario);
+            }
+
+            if (!feof(binario)) {
+                fseek(binario, -1, 1);
+            }
+
         }
 
     }
-    free(temp);
 
-// Quantas buscas o usuário quer fazer
-    int n;
-    scanf("%d", &n);
-    char buscado[n][23];
-    char valor[n][23];
-    for (int i = 0; i < n; ++i){
-        scanf("%s", buscado[i]);
-        scanf("%s", valor[i]);
-    }
-
-
-
-
-
-    No *novo = lista->inicio;
-
-    while (novo != NULL){
-        for (int i = 0; i < n; ++i) {
-            if(strcmp(buscado[i],"nomeTecnologiaOrigem")==0){
-
-                if(strcmp(novo->reg->tecnologiaOrigem.string, valor[i]) == 0)
-                printaRegistro(novo->reg);
-            }
-            if(strcmp(buscado[i],"nomeTecnologiaDestino")==0){
-
-                if(strcmp(novo->reg->tecnologiaDestino.string, valor[i]) == 0)
-                printaRegistro(novo->reg);
-            }
-            if(strcmp(buscado[i],"peso")==0){
-
-                if(novo->reg->peso == atoi(valor[i]))
-                printaRegistro(novo->reg);
-            }
-            if(strcmp(buscado[i],"popularidade")==0){
-
-                if(novo->reg->popularidade == atoi(valor[i]))
-                printaRegistro(novo->reg);
-            }
-            if(strcmp(buscado[i],"grupo")==0){
-
-                if(novo->reg->grupo == atoi(valor[i]))
-                printaRegistro(novo->reg);
-            }
-        }
-        novo = novo->prox;
-    }
+}
 
     fecha_arquivo(binario);
     liberaLista(lista);
