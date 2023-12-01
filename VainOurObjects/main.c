@@ -57,12 +57,12 @@ int main(int argv, char *argc[])
                 {
                     scan_quote_string(info_busca);
                     fseek(info_dados, 13, SEEK_SET);
-                    parte_3(info_dados, especifica, info_busca, &registro); //arrumar
+                    parte_3(nome_dados, especifica, info_busca, &registro); //arrumar
                 } else if (strcmp(especifica, "grupo") == 0 || strcmp(especifica, "popularidade") == 0 ||
                            strcmp(especifica, "peso") == 0) {
                     scanf("%s", info_busca);
                     fseek(info_dados, 13, SEEK_SET);
-                    parte_3(info_dados, especifica, info_busca, &registro);
+                    parte_3(nome_dados, especifica, info_busca, &registro);
 
                 } else if (strcmp(especifica, "nomeTecnologiaOrigemDestino") == 0) {
                     scan_quote_string(info_busca);
