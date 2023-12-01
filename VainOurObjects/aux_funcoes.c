@@ -322,7 +322,7 @@ int parte_3(char *filename, char* especifica,char* info_busca, Registro *registr
 
     }
 
-}
+
 
     fecha_arquivo(binario);
     liberaLista(lista);
@@ -355,34 +355,34 @@ int parte_4(char *filename, int RRN_P) {
         printf("Registro inexistente.");
         return 0;
     }
+
     fseek(binario, RRN * TAM_REGISTRO, 1);  // coloca o ponteiro no inicio do registro (byte offset)
-
-    char lixo = '$';
-    while (!feof(binario) && lixo == '$') {
-        fread(&lixo, sizeof(char), 1, binario);
-    }
-
-    if (!feof(binario)) {
-        fseek(binario, -1, 1);
-    }
+    fread(&(registro->removido),sizeof(char), 1, binario);
 
     //leitura_tabela(binario, registro);
-    fread(&(registro->removido),sizeof(char), 1, binario);
-    fread(&(registro->grupo), sizeof(int), 1, binario);
-    fread(&(registro->popularidade), sizeof(int), 1, binario);
-    fread(&(registro->peso), sizeof(int), 1, binario);
 
-    //string variavel
-    fread(&registro->tecnologiaOrigem.tamanho, sizeof(int), 1, binario);
-    fread(registro->tecnologiaOrigem.string, sizeof(char)*registro->tecnologiaOrigem.tamanho,1 , binario);
-    registro->tecnologiaOrigem.string[registro->tecnologiaOrigem.tamanho] = '\0';
+    if(registro->removido == '1') printf("Registro inexistente.\n");
 
+    else{
 
-    fread(&registro->tecnologiaDestino.tamanho, sizeof(int), 1, binario);
-    fread(registro->tecnologiaDestino.string, sizeof(char)*registro->tecnologiaDestino.tamanho,1 , binario);
-    registro->tecnologiaDestino.string[registro->tecnologiaDestino.tamanho] = '\0';
+        fread(&(registro->grupo), sizeof(int), 1, binario);
+        fread(&(registro->popularidade), sizeof(int), 1, binario);
+        fread(&(registro->peso), sizeof(int), 1, binario);
 
-    printaRegistro(registro);
+        //string variavel
+        fread(&registro->tecnologiaOrigem.tamanho, sizeof(int), 1, binario);
+        fread(registro->tecnologiaOrigem.string, sizeof(char)*registro->tecnologiaOrigem.tamanho,1 , binario);
+        registro->tecnologiaOrigem.string[registro->tecnologiaOrigem.tamanho] = '\0';
+
+        //string variavel
+        fread(&registro->tecnologiaDestino.tamanho, sizeof(int), 1, binario);
+        fread(registro->tecnologiaDestino.string, sizeof(char)*registro->tecnologiaDestino.tamanho,1 , binario);
+        registro->tecnologiaDestino.string[registro->tecnologiaDestino.tamanho] = '\0';
+
+        printaRegistro(registro);
+
+    }
+
 
     fclose(binario);
     deletaRegistro(registro);
