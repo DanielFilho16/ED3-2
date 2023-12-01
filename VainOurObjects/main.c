@@ -16,6 +16,12 @@ int main(int argv, char *argc[])
     char filename[32];
     scanf("%d", &escolha);
 
+    char nome_dados[20];
+    char indice[20];
+    char especifica[55];
+    char info_busca[55];
+    Registro registro;
+    int repete = 0;
 
     switch (escolha) {
 
@@ -27,7 +33,7 @@ int main(int argv, char *argc[])
             parte_2(filename);
         case 3:
             scanf("%s", filename);
-            parte_3(filename);
+            parte_3(filename, especifica, info_busca, &registro);
         case 4:
             scanf("%s", filename);
             //parte_4(filename, int RRN_P);
@@ -35,13 +41,6 @@ int main(int argv, char *argc[])
             printf("Funcionalidade 5");
         case 6:
         {
-            char nome_dados[20];
-            char indice[20];
-            char especifica[55];
-            char info_busca[55];
-            Registro registro;
-            int repete = 0;
-
             scanf("%s%s%d", nome_dados, indice, &repete);
 
             FILE *info_dados = fopen(nome_dados, "rb");

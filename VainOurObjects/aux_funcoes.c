@@ -196,7 +196,6 @@ int parte_3(char *filename, char* especifica,char* info_busca, Registro *registr
         return 0;
     }
 
-    Registro *registro = novoRegistro();
     Cabecalho *cabecalho = novoCabecalho();
     Lista *lista = novaLista();
 
@@ -238,8 +237,8 @@ int parte_3(char *filename, char* especifica,char* info_busca, Registro *registr
 
 
             if (strcmp(especifica, "nomeTecnologiaOrigem") == 0){
-                if (registro->tecnologiaOrigem.tamanho == strlen(busca) && strncmp(busca, registro->tecnologiaOrigem.string, registro->tecnologiaOrigem.tamanho) == 0){
-                    imprimirRegistrosNaTela(&registro);
+                if (registro->tecnologiaOrigem.tamanho == strlen(info_busca) && strncmp(info_busca, registro->tecnologiaOrigem.string, registro->tecnologiaOrigem.tamanho) == 0){
+                    printaRegistro(&registro);
                     flag_encontrou = 1;
                 }
             }
@@ -248,7 +247,7 @@ int parte_3(char *filename, char* especifica,char* info_busca, Registro *registr
 
                 if (sscanf(info_busca, "%d", &busca_int) == 1 && busca_int == registro->grupo){
 
-                    imprimirRegistrosNaTela(&registro);
+                    printaRegistro(&registro);
                     flag_encontrou = 1;
                 }
             }
@@ -257,15 +256,15 @@ int parte_3(char *filename, char* especifica,char* info_busca, Registro *registr
 
                 if (sscanf(info_busca, "%d", &busca_int) == 1 && busca_int == registro->popularidade)
                 {
-                    imprimirRegistrosNaTela(&registro);
+                    printaRegistro(&registro);
                     flag_encontrou = 1;
                 }
             }
             if (strcmp(especifica, "nomeTecnologiaDestino") == 0){
 
-                if (registro->tecnologiaDestino.tamanho == strlen(busca) && strncmp(busca, registro->tecnologiaDestino.string, registro->tecnologiaDestino.tamanho) == 0)
+                if (registro->tecnologiaDestino.tamanho == strlen(info_busca) && strncmp(info_busca, registro->tecnologiaDestino.string, registro->tecnologiaDestino.tamanho) == 0)
                 {
-                    imprimirRegistrosNaTela(&out);
+                    printaRegistro(&registro);
                     flag_encontrou = 1;
                 }
             }
@@ -274,7 +273,7 @@ int parte_3(char *filename, char* especifica,char* info_busca, Registro *registr
 
                 if (sscanf(info_busca, "%d", &busca_int) == 1 && busca_int == registro->peso)
                 {
-                    imprimirRegistrosNaTela(registro);
+                    printaRegistro(&registro);
                     flag_encontrou = 1;
                 }
             }
@@ -321,8 +320,6 @@ int parte_3(char *filename, char* especifica,char* info_busca, Registro *registr
         }
 
     }
-
-
 
     fecha_arquivo(binario);
     liberaLista(lista);
