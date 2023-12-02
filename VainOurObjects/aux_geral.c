@@ -638,11 +638,10 @@ int recupera(char *busca, int rrnDaRaiz,FILE *indice)
 
 /*Fim da parte 5*/
 
-//int main()
-//{
-//    recupera();
-//
-//};
+
+
+
+//LIVRO
 
 //void InserePagina(Ponteiro P, Registro R, Ponteiro Pd)
 //{

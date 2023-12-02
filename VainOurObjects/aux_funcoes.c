@@ -389,7 +389,7 @@ int parte_4(char *filename, int RRN_P) {
 
 }
 
-//Função para pesquisar na árvore B
+//Função para pesquisar na árvore B  LIVRO  (não sei se vai ser útil)
 //void parte_5(Registro *x, Ponteiro P)
 //{
 //    long i =1;
