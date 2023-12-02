@@ -439,6 +439,27 @@ int parte_6(FILE *dados, FILE *indice , char *busca )
 
 } //ok
 
+int parte_7(FILE *dados, FILE *indice ,char *busca)
+{
+    Cabecalho_arvore cabecalho;
+    lerCabecalho(&cabecalho, indice);
+    if (cabecalho.status == '0')
+    {
+        printf("Falha no processamento do arquivo.");
+        return -1;
+    }
+
+    if (recuperando(busca, cabecalho.noRaiz, indice) == -1)
+    {
+        printf("Registro inexistente.\n");
+    }
+    else
+    {
+        parte_4((char *) dados, recuperando(busca, cabecalho.noRaiz, indice));
+    }
+    return 0;
+} //ok
+
 
 
 

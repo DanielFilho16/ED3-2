@@ -14,7 +14,7 @@ int parte_3(char *filename, char* especifica,char* info_busca, Registro *registr
 int parte_4(char *filename, int RRN_P);
 int parte_5();
 int parte_6(FILE *dados, FILE *indice ,char *busca);
-int parte_7();
+int parte_7(FILE *dados, FILE *indice ,char *busca);
 
 
 #endif //UNTITLED_AUX_FUNCOES_H
