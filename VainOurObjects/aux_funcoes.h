@@ -6,6 +6,7 @@
 #define UNTITLED_AUX_FUNCOES_H
 
 #include <stdio.h>
+#include "aux_geral.h"
 
 int parte_1(char *filename);
 int parte_2(char *filename);

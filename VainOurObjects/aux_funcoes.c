@@ -411,6 +411,12 @@ int parte_4(char *filename, int RRN_P) {
 //    else Pesquisa (x, P -> p[i]);
 //}
 
+int parte_5()
+{
+
+}
+
+
 int parte_6(FILE *dados, FILE *indice , char *busca )
 {
     Cabecalho_arvore cabecalho;

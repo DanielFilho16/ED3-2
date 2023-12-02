@@ -440,6 +440,204 @@ int recupera(char *busca, int rrnDaRaiz,FILE *indice)
 /*Fim da parte 6*/
 
 
+/*PARTE 5*/
+
+/*---------------------------------------------------------------------------------------------*/
+
+//int insereNoIndice(Pagina *no, char* newKey, int PR, int P){
+//    int pos = 0;
+//    while (pos < 3) {
+//        if (strlen(no->C[pos]) == 0){
+//            strcpy(no->C[pos], newKey);
+//            no->PR[pos] = PR;
+//            break;
+//        } else if (strcmp(newKey, no->C[pos]) < 0){
+//            no->P[3] = no->P[2];
+//            strcpy(no->C[2], no->C[1]);
+//            no->PR[2] = no->PR[1];
+//            if (pos == 0){
+//                no->P[2] = no->P[1];
+//                no->P[1] = no->P[0];
+//                strcpy(no->C[1], no->C[0]);
+//                no->PR[1] = no->PR[0];
+//                strcpy(no->C[0], newKey);
+//                no->PR[0] = PR;
+//            } else {
+//                strcpy(no->C[1], newKey);
+//                no->PR[1] = PR;
+//            }
+//            break;
+//        }
+//        pos++;
+//    }
+//    no->nroChavesno++;
+//    return pos;
+//}
+//
+//int BuscaPai(FILE* indice, int RRN, char* chave, int aux){
+//    Pagina no;
+//    read_node(indice, &no, RRN); // Implemente a função de leitura do nó do disco
+//    int i = 0;
+//    while (i < no.nroChavesno && strcmp(chave, no.chaves[i]) > 0) {
+//        i++;
+//    }
+//
+//    if (i < no.nroChavesno && strcmp(chave, no.chaves[i]) == 0) {
+//        return aux;
+//    }
+//    int cmp = strcmp(chave, no.C[i]);
+//    if (strlen(no.C[i]) == 0){
+//        cmp = -1;
+//    }
+//    if (no.P[i] != -1 && cmp < 0) {
+//        BuscaPai(indice, no.P[i], chave, no.RRNdoNO);
+//    } else if (no.P[i + 1] != -1) {
+//        BuscaPai(indice, no.P[i+1], chave,  no.RRNdoNO);
+//    }
+//}
+//
+//btree_header InsereOverflow(FILE* indice, btree_header bHeader, Pagina* no, char* newKey, int PR, int P) {
+//    // Verifica se ta no nó raiz, se estiver, splita e cria outro nó
+//    int RRN_pai = BuscaPai(indice, bHeader.noRaiz, no->C[0], -1);
+//    Pagina pai;
+//    if (RRN_pai != -1){
+//        read_node(indice, &pai, RRN_pai);
+//    }
+//
+//    // Com o nó pai, ordenar o no a ser splitado e alocar a chave na posição [1] no pai
+//    Pagina auxiliar = criaNode();
+//    int pos = 0;
+//    while (pos < no->nroChavesNo && strcmp(newKey, no->C[pos]) > 0) {
+//        pos++;
+//    }
+//    /*char temp[256];
+//    int PRaux;
+//    int Paux;
+//    for (int i = no->nroChavesNo; i > pos; i--) {
+//        if (i != 3){
+//            strcpy(no->C[i], no->C[i - 1]);
+//            no->PR[i] = no->PR[i - 1];
+//            no->P[i] = no->P[i - 1];
+//        } else {
+//            strcpy(temp, no->C[i - 1]);
+//            PRaux = no->PR[i - 1];
+//            Paux = no->P[i];
+//        }
+//    }
+//    if (pos == 3){
+//        strcpy(temp, newKey);
+//        PRaux = PR;
+//        Paux = P;
+//    } else {
+//        // Insere a nova chave na posição correta
+//        strcpy(no->C[pos], newKey);
+//        no->PR[pos] = PR;
+//        no->P[pos + 1] = P;
+//
+//    }*/
+//
+//
+//    char temp[4][256];
+//    int PRtemp[4];
+//    int Ptemp[5];
+//
+//
+//    // Preenche os vetores temp com as chaves e seus respectivos PR e P
+//    for (int i = 0; i < 4; i++) {
+//        if (i != 3) {
+//            strcpy(temp[i], no->C[i]);
+//            PRtemp[i] = no->PR[i];
+//            Ptemp[i] = no->P[i];
+//        } else if (i == 3) {
+//            strcpy(temp[i], newKey);
+//            PRtemp[i] = PR;
+//            Ptemp[i] = no->P[i];  // Defina o valor apropriado para o ponteiro
+//            Ptemp[i + 1] = P;
+//        }
+//    }
+//
+//
+//    for (int i = 3; i >= pos; i--) {
+//        if (i != pos){
+//            strcpy(temp[i], temp[i - 1]);
+//            PRtemp[i] = PRtemp[i - 1];
+//            Ptemp[i + 1] = Ptemp[i];
+//        } else {
+//            strcpy(temp[i], newKey);
+//            PRtemp[i] =  PR;
+//            Ptemp[i + 1] = P;
+//        }
+//    }
+//    // Cria novo nó
+//    auxiliar.P[0] = Ptemp[2];
+//    auxiliar.PR[0] = PRtemp[2];
+//    strcpy(auxiliar.C[0], temp[2]);
+//    auxiliar.P[1] =  Ptemp[3];
+//    auxiliar.PR[1] = PRtemp[3];
+//    strcpy(auxiliar.C[1], temp[3]);
+//    auxiliar.P[2] = Ptemp[4];
+//    auxiliar.alturaNo = no->alturaNo;
+//    auxiliar.nroChavesNo = 2;
+//    auxiliar.RRNdoNO = bHeader.RRNproxNo;
+//    bHeader.RRNproxNo++;
+//    int ptr = no->PR[1];
+//    for (int i = 0; i < 3; i++) {
+//        no->P[i] = -1;
+//        no->P[i + 1] = -1;
+//        no->C[i][0] = '\0';
+//        no->PR[i] = -1;
+//    }
+//
+//    no->P[0] = Ptemp[0];
+//    strcpy(no->C[0], temp[0]);
+//    no->PR[0] = PRtemp[0];
+//    no->P[1] = Ptemp[1];
+//    no->nroChavesNo = 1;
+//    if (no->alturaNo == 1){
+//        for (int j = 0; j < 4; j++){
+//            no->P[j] = -1;
+//        }
+//    }
+//    // Fazer isso recursivamente até o nó tiver espaço ou for o nó raiz
+//
+//    if (pai.nroChavesNo == 3 || RRN_pai == -1){
+//        if (RRN_pai != -1){
+//            pai.alturaNo = no->alturaNo + 1;
+//            bHeader = InsereOverflow(indice, bHeader, &pai, temp[1], PRtemp[1], auxiliar.RRNdoNO);
+//        } else {
+//            Pagina raiz = criaNode();
+//            raiz.alturaNo = (no->alturaNo + 1);
+//            raiz.nroChavesNo = 1;
+//            raiz.RRNdoNO = bHeader.RRNproxNo;
+//            bHeader.RRNproxNo++;
+//            bHeader.noRaiz = raiz.RRNdoNO;
+//            strcpy(raiz.C[0], temp[1]);
+//            raiz.PR[0] = PRtemp[1];
+//            raiz.P[0] = no->RRNdoNO;
+//            raiz.P[1] = auxiliar.RRNdoNO;
+//            escreve_node(indice, &raiz);
+//        }
+//
+//    } else {
+//        int ptr = insereNoIndice(&pai, temp[1], PRtemp[1], auxiliar.RRNdoNO);
+//        pai.P[ptr + 1] = auxiliar.RRNdoNO;
+//        escreve_node(indice, &pai);
+//    }
+//
+//    // Apaga os registros do no, com excecao do na primeira posicao
+//
+//    escreve_node(indice, no);
+//    escreve_node(indice, &auxiliar);
+//
+//    return bHeader;
+//}
+
+
+
+/*---------------------------------------------------------------------------------------------*/
+
+/*Fim da parte 5*/
+
 //int main()
 //{
 //    recupera();

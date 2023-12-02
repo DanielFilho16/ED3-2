@@ -46,6 +46,12 @@ int main(int argv, char *argc[])
             FILE *info_dados = fopen(nome_dados, "rb");
             FILE *info_indice = fopen(indice, "rb");
 
+            if (info_dados == NULL || info_indice == NULL)
+            {
+                printf("Falha no processamento do arquivo.");
+                break;
+            }
+
             fseek(info_dados, 13, SEEK_SET);
 
             for (int i = 0; i < repete; i++)
@@ -53,7 +59,7 @@ int main(int argv, char *argc[])
                 scanf("%s", especifica);
 
                 //se o valor for igual, pega o que esta ali
-                if (strcmp(especifica, "nomeTecnologiaOrigem") == 0 || strcmp(especifica, "nomeTecnologiaDestino") == 0)
+                if (strcmp(especifica, "nomeTecnologiaOrigem") == 0 || strcmp(especifica, "nomeTecnologiaOrigemDestino") == 0)
                 {
                     scan_quote_string(info_busca);
                     fseek(info_dados, 13, SEEK_SET);
