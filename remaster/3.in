@@ -1,0 +1,4 @@
+3 ./data/binario3.bin 2
+
+nomeTecnologiaOrigem "SQL-SERVER"
+nomeTecnologiaOrigem "ENTITY-FRAMEWORK" 
