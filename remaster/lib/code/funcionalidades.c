@@ -133,5 +133,53 @@ void func_ler_registro_id(){
     middle_fechar_arquivo(bin);
 }
 
+void func_criar_indexador(){
+    char path_dados[STR_DEFAULT_SIZE], path_idx[STR_DEFAULT_SIZE];
 
+    scanf("%s %s",path_dados,path_idx);
+
+    FILE* bin = middle_abrir_arquivo(path_dados,"rb");
+    FILE* idx = middle_abrir_arquivo(path_idx,"wb+");
+
+    btree_cabecalho_type cab_btree = btree_criar_cabecalho_btree();
+    regs_cabecalho_type cab_dados = regs_ler_cabecalho(bin);
+
+    int reg_rnn = 0;
+
+    int cont=0;
+    while(!feof(bin) && cont++ < 3){
+        regs_tecnologia_type regs_temp;
+        regs_temp = regs_ler_registro(bin);
+        reg_rnn++;
+        if(regs_temp.removido == '0'){
+            middle_print_registro(regs_temp);
+            char * nv_chave = middle_gerar_chave(regs_temp);
+            btree_inserir_chave(idx,&cab_btree,nv_chave,reg_rnn);
+        }
+        
+
+    }
+}
+
+int func_busca(FILE *indice , char *busca )
+{
+    btree_cabecalho_type cabecalho;
+    btree_ler_cabecalho(indice);
+    if (cabecalho.status == '0')
+    {
+        printf("Falha no processamento do arquivo.");
+        return -1;
+    }
+
+    if (recupera(busca, cabecalho.noRaiz, indice) == -1)
+    {
+        printf("Registro inexistente.\n");
+    }
+    else
+    {
+        func_ler_registro_id();
+    }
+    return 0;
+
+} 
 

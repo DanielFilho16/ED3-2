@@ -6,8 +6,11 @@
 
 #define TAM_TECNO 20
 #define STR_DEFAULT_SIZE 255 
+#define BTREE_REG_SIZE 205
+#define MAX_KEYS 3
 
 #define CHAR_TRASH '$'
+#define EMPTY_KEY "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
 
 #define ERROR_FILE_OPEN 100
 

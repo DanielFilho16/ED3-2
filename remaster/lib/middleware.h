@@ -4,6 +4,7 @@
 #include <ctype.h>
 #include "controlador_csv.h"
 #include "controlador_registro.h"
+#include "controlador_btree.h"
 #include "defines.h"
 
 FILE * middle_abrir_arquivo(char * path, char  * modo);
@@ -28,5 +29,10 @@ void middle_scan_quote_string(char *str);
 
 void middle_print_cabecalho(regs_cabecalho_type cab);
 void middle_print_registro(regs_tecnologia_type registro);
+
+char * middle_gerar_chave(regs_tecnologia_type registro);
+
+int recupera(char *busca, int rrnDaRaiz,FILE *indice);
+int recuperando(char *busca, int rrnAtual, FILE *indice);
 
 #endif

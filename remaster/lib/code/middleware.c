@@ -172,6 +172,24 @@ void middle_libera_lista(lista_tecnos *lista){
     }
 }
 
+char * middle_gerar_chave(regs_tecnologia_type registro){
+    char * chave = (char *) malloc(sizeof(char)*55);
+
+    for(int i=0;i<registro.tecnologiaOrigem.tamanho;i++){
+        chave[i] = registro.tecnologiaOrigem.string[i];
+    }
+
+    for(int i=registro.tecnologiaOrigem.tamanho;i < (registro.tecnologiaOrigem.tamanho + registro.tecnologiaDestino.tamanho);i++){
+        chave[i] = registro.tecnologiaDestino.string[i-registro.tecnologiaOrigem.tamanho];
+    }
+
+    
+    for(int i=(registro.tecnologiaOrigem.tamanho + registro.tecnologiaDestino.tamanho);i<55;i++){
+        chave[i] = CHAR_TRASH;
+    }
+    return chave;
+}
+
 void middle_print_cabecalho(regs_cabecalho_type cab){
     printf(">status:%c\n",cab.status);
     printf(">proxRRN:%d\n",cab.proxRRN);
@@ -240,3 +258,142 @@ void middle_scan_quote_string(char *str) {
         strcpy(str, "");
     }
 }
+
+
+int recuperando(char *busca, int rrnAtual, FILE *indice) //EncontraRRNrec
+{
+    
+
+//     typedef struct{
+//     int nroChavesNo;          // 4 bytes
+//     int alturaNo;             // 4 bytes
+//     int RRNdoNo;              // 4 bytes
+
+//     int p1;                 // 4 bytes
+//     char c1[55];            // 55 bytes
+//     int pr1;                // 4 bytes
+
+//     int p2;                 // 4 bytes
+//     char c2[55];            // 55 bytes
+//     int pr2;                // 4 bytes
+
+//     int p3;                 // 4 bytes
+//     char c3[55];            // 55 bytes
+//     int pr3;                // 4 bytes
+     
+//     int p4;   // 4 bytes
+// }btree_node_reg_type; 
+
+
+    fseek(indice, (rrnAtual + 1) * 205, SEEK_SET);
+    btree_node_reg_type pagina;
+    leitura_no(&pagina, indice);
+
+    for (int i = 0; i <= 3; ++i)
+    {
+        int resultadoc1 = strcmp(busca, pagina.c1);
+        if (pagina.c1)
+        {
+            if (pagina.p1 != -1)
+            {
+                return recuperando(busca, pagina.p1, indice);
+            }
+            else
+            {
+                return -1;
+            }
+        }
+        if (resultadoc1 < 0 || pagina.c1[0] == '\0')
+        {
+            if (pagina.p1 != -1)
+            {
+                return recuperando(busca, pagina.p1, indice);
+            }
+            else
+            {
+                return -1;
+            }
+        }
+        else if (resultadoc1 == 0)
+        {
+            return pagina.c1;
+        }
+
+
+        int resultadoc2 = strcmp(busca, pagina.c2);
+        if (pagina.c2)
+        {
+            if (pagina.p2 != -1)
+            {
+                return recuperando(busca, pagina.p2, indice);
+            }
+            else
+            {
+                return -1;
+            }
+        }
+        if (resultadoc2 < 0 || pagina.c2[0] == '\0')
+        {
+            if (pagina.p2 != -1)
+            {
+                return recuperando(busca, pagina.p2, indice);
+            }
+            else
+            {
+                return -1;
+            }
+        }
+        else if (resultadoc2 == 0)
+        {
+            return pagina.c2;
+        }
+
+
+
+
+        int resultadoc3 = strcmp(busca, pagina.c3);
+        if (pagina.c3)
+        {
+            if (pagina.p3 != -1)
+            {
+                return recuperando(busca, pagina.p3, indice);
+            }
+            else
+            {
+                return -1;
+            }
+        }
+        if (resultadoc3 < 0 || pagina.c3[0] == '\0')
+        {
+            if (pagina.p1 != -1)
+            {
+                return recuperando(busca, pagina.p3, indice);
+            }
+            else
+            {
+                return -1;
+            }
+        }
+        else if (resultadoc3 == 0)
+        {
+            return pagina.c3;
+        }
+
+
+    }
+
+    if ( pagina.nroChavesNo != -1)
+    {
+        return recuperando(busca, pagina.nroChavesNo, indice);
+    }
+    else
+    {
+        return -1;
+    }
+}
+
+int recupera(char *busca, int rrnDaRaiz,FILE *indice)
+{
+    return recuperando(busca, rrnDaRaiz, indice);
+}
+

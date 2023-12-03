@@ -20,6 +20,12 @@ int main(int argc, char * argv[]){
             break;
         case 5:
             func_criar_indexador();
+            break;
+        
+        case 6:
+            func_busca();
+            break;
+        
         default:
             printf("Funcionalidade invalida.\n");
             exit(0);
